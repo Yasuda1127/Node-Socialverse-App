@@ -35,7 +35,7 @@ const UserSchema = new mongoos.Schema(
       type: Array, // フォロワーは増えていくため配列にする
       default: [],
     },
-    following: {
+    followings: {
       type: Array,
       default: [],
     },
