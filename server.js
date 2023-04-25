@@ -3,7 +3,7 @@ const app = express(); //express関数を格納→いろんな関数、クラス
 const userRoute = require("./routes/users"); // user.jsのrouterが入っている
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
-const PORT = 3000;
+const PORT = 4000;
 const mongoose = require("mongoose");
 require("dotenv").config();  // .envファイルを呼び出す
 
