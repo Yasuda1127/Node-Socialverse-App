@@ -87,20 +87,32 @@ router.put("/:id/like", async (req, res) => {
   }
 });
 
+// プロフィール専用のタイムラインの取得
+router.get("/profile/:username", async (req, res) => {
+  try {
+    const user = await User.findOne({username: req.params.username}); // 「findOne」はモングースの関数。一つのusernameを取得するため。プロパティの指定が必要。
+    const posts = await Post.find({ userId: user._id }); // 自分の投稿
+    return res.status(200).json(posts);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
+
 // タイムラインの投稿を取得
-router.get("/timeline/all", async (req, res) => {
+router.get("/timeline/:userId", async (req, res) => {
   // 「/timeline」と記述すると「:id/」のように特定の取得になるため、差別化するために「/all」をつける
   try {
     // 自分の投稿と、フォローしている人の投稿を持ってくる
-    const currentUser = await User.findById(req.body.userId); // どの人が投稿したのかを判別するため、ユーザースキーマを取得(自分？)
+    const currentUser = await User.findById(req.params.userId); // どの人が投稿したのかを判別するため、ユーザースキーマを取得(自分？)
     const userPosts = await Post.find({ userId: currentUser._id }); // 投稿した人の投稿を全部取得する(_idは「currentUser」のuserid)
     // 自分がフォローしている友達の投稿内容を全て表示する
-    const friendPosts = await Promise.all( // currentUserでawaitを使っており、いつでも取得できるように待っておくという記述
-        currentUser.followings.map((friendId) => {
-            return Post.find({ userId: friendId }) // 全部探してくる
-        })  // 「followings」は、自分がフォローしているユーザーが全て格納されている
+    const friendPosts = await Promise.all(
+      // currentUserでawaitを使っており、いつでも取得できるように待っておくという記述
+      currentUser.followings.map((friendId) => {
+        return Post.find({ userId: friendId }); // 全部探してくる
+      }) // 「followings」は、自分がフォローしているユーザーが全て格納されている
     );
-    return res.status(200).json(userPosts.concat(...friendPosts)) // スプレッド構文で展開した状態で合体する 
+    return res.status(200).json(userPosts.concat(...friendPosts)); // スプレッド構文で展開した状態で合体する
   } catch (err) {
     return res.status(500).json(err);
   }
