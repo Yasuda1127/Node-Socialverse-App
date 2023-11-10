@@ -51,7 +51,7 @@ router.delete("/:id", async (req, res) => {
 //   }
 // });
 
-// クエリでユーザー情報を取得
+// クエリでユーザー情報を取得(プロフィール情報取得)
 router.get("/", async (req, res) => {
   const userId = req.query.userId; 
   const username = req.query.username;
@@ -68,8 +68,8 @@ router.get("/", async (req, res) => {
 });
 
 // ユーザーのフォロー
-router.put("/:id/follow", async (req, res) => {
-  if (req.body.userId !== req.params.id) {
+router.put("/:id/follow", async (req, res) => { // putは情報の更新
+  if (req.body.userId !== req.params.id) { // 自分のユーザーIDに等しくない場合
     try {
       const user = await User.findById(req.params.id); // フォローする相手のユーザー情報
       const currentUser = await User.findById(req.body.userId); // 自分のユーザー情報

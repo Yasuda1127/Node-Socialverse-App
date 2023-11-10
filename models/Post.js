@@ -4,7 +4,7 @@ const PostSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
-      required: true,
+      required: true, // 必須の条件
     },
     desc: {
       type: String,
