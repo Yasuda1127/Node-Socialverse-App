@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
   },
   // 保存する画像の名前
   filename: (req, file, cb) => {
-    cb(null, req.body.name);
+    cb(null, req.body.name); // req.body.nameと書くことで、画像の名前で格納できる
   },
 });
 

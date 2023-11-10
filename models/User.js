@@ -7,7 +7,7 @@ const UserSchema = new mongoos.Schema(
     username: {
       type: String,
       required: true, // 必ず必要(これがないと成立しない)
-      min: 3,
+      min: 2,
       max: 25,
       unique: true, // trueにすることで、他のユーザーネームとの重複を許さない
     },
